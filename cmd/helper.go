@@ -23,7 +23,7 @@ func findAllChildDirs(rootDir string) []string {
 
 		name := info.Name()
 
-		if config.Ignore[name] || config.Deps[name] {
+		if config.Ignore[name] || config.Deps[name] || config.Ignore[fsPath] {
 			return filepath.SkipDir
 		}
 
