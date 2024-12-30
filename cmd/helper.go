@@ -82,9 +82,12 @@ func printError(message string) {
 	os.Exit(0)
 }
 
-func promptForConfirmation(dir string) {
+func promptForConfirmation(label string) {
+
+	label += " (y/N): "
+
 	prompt := promptui.Prompt{
-		Label:     "Are you sure, you want to remove dependencies in this folder - " + dir + " (y/N)",
+		Label:     label,
 		Default:   "n",
 		IsConfirm: true,
 	}

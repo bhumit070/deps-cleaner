@@ -348,3 +348,6 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/go,linux,godot,macos,goland,windows,goodsync,goland+all,goland+iml
 
 bin
+
+vendor
+node_modules

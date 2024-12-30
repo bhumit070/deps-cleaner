@@ -49,8 +49,8 @@ var cleanDependencies = &cobra.Command{
 			printError("Directory " + dirToClean + " is invalid.")
 		}
 
-		if skipConfirmation == false {
-			promptForConfirmation(dirToClean)
+		if !skipConfirmation && !isDryRun {
+			promptForConfirmation("Are you sure, you want to remove dependencies in this folder - " + dirToClean)
 		}
 
 		cleanDir(dirToClean)
