@@ -133,7 +133,7 @@ func loadConfigFiles() {
 	_, isValid := validatePath(configFilePath, true, false)
 
 	if !isValid {
-		downloadConfigFile(dependenciesFileURL, configFilePath)
+		downloadConfigFile(remoteConfigURL, configFilePath)
 	}
 
 	file, err := os.Open(configFilePath)
@@ -150,13 +150,16 @@ func loadConfigFiles() {
 		printError(err.Error())
 	}
 
+	if config.RemoteConfigURL == "" {
+		config.RemoteConfigURL = remoteConfigURL
+	}
+
 }
 
 func downloadConfigFile(url, filepath string) error {
-	// Step 1: Check if the file exists
 	existingData := make(map[string]interface{})
 	if _, err := os.Stat(filepath); err == nil {
-		// File exists, read its content
+
 		file, err := os.Open(filepath)
 		if err != nil {
 			return fmt.Errorf("failed to open existing file: %v", err)
@@ -169,7 +172,6 @@ func downloadConfigFile(url, filepath string) error {
 		}
 	}
 
-	// Step 2: Download the new JSON file
 	resp, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("failed to make GET request: %v", err)
@@ -186,10 +188,12 @@ func downloadConfigFile(url, filepath string) error {
 		return fmt.Errorf("failed to decode new JSON: %v", err)
 	}
 
-	// Step 3: Merge the existing data with the new data
 	mergeMaps(existingData, newData)
 
-	// Step 4: Write the merged data back to the file
+	if _, exists := existingData["remoteConfigURL"]; !exists {
+		existingData["remoteConfigURL"] = remoteConfigURL
+	}
+
 	outFile, err := os.Create(filepath)
 	if err != nil {
 		return fmt.Errorf("failed to create file: %v", err)
@@ -197,12 +201,11 @@ func downloadConfigFile(url, filepath string) error {
 	defer outFile.Close()
 
 	encoder := json.NewEncoder(outFile)
-	encoder.SetIndent("", "  ") // Pretty print the JSON
+	encoder.SetIndent("", "  ")
 	if err := encoder.Encode(existingData); err != nil {
 		return fmt.Errorf("failed to write merged JSON to file: %v", err)
 	}
 
-	fmt.Println("JSON file updated successfully!")
 	return nil
 }
 

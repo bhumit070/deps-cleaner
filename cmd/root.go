@@ -4,9 +4,34 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"path"
 )
+
+func Execute() {
+	err := rootCmd.Execute()
+	if err != nil {
+		os.Exit(1)
+	}
+}
+
+func init() {
+	loadConfigFiles()
+
+	rootCmd.Flags().BoolP("version", "v", false, "Prints the version")
+
+	rootCmd.AddCommand(updateLocalConfigurationWithRemote)
+
+	rootCmd.AddCommand(cleanDependencies)
+	cleanDependencies.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
+
+	rootCmd.AddCommand(updateLocalConfig)
+
+	updateLocalConfig.Flags().StringVar(&enumValue, "action", "", fmt.Sprintf("Specify the action (%v)", allowedValuesInLocalUpdate))
+	updateLocalConfig.MarkFlagRequired("action")
+
+}
 
 func cleanupDir(dir string) {
 	dir, isValid := validatePath(dir, false, true)
@@ -48,23 +73,14 @@ func cleanDir(dir string) {
 
 func updateLocalConfigurationWithRemoteConfig() {
 	configFilePath := generateConfigPaths()
-	downloadConfigFile(dependenciesFileURL, configFilePath)
+	downloadConfigFile(config.RemoteConfigURL, configFilePath)
 }
 
-func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
-		os.Exit(1)
+func updateValuesInLocalConfig() {
+
+	if enumValue == "add" {
+	} else if enumValue == "update" {
+	} else if enumValue == "remove" {
 	}
-}
-
-func init() {
-	rootCmd.Flags().BoolP("version", "v", false, "Prints the version")
-
-	loadConfigFiles()
-
-	rootCmd.AddCommand(updateLocalConfigurationWithRemote)
-	rootCmd.AddCommand(cleanDependencies)
-	cleanDependencies.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
 
 }
