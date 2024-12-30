@@ -19,14 +19,14 @@ jobs:
           sudo apt-get install -y make
 
       - name: Build release
-        run: make release
+        run: make build_all
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          tag_name: "v${{ github.run_number }}"
-          release_name: "Release v${{ github.run_number }}"
-          body: "This is an automated release."
+          tag_name: 'v${{ github.run_number }}'
+          release_name: 'Release v${{ github.run_number }}'
+          body: 'This is an automated release.'
           draft: false
           prerelease: false
         env:
