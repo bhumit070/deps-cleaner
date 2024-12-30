@@ -15,3 +15,19 @@ Let's be real—your disk is probably full of junk. You've cloned all those repo
 I got the idea for this tool when I saw my disk slowly filling up with old projects and random repos I cloned for fun. You know, those projects you keep saying you’ll get back to? Yeah, we all have them.
 
 I first thought of making a tool like `np-kill` just for node_modules, but then I remembered I also work with Python and PHP. So, I made this tool flexible enough to delete any dependency folder, not just JavaScript. Because why stop at cleaning up one language when you can clean up everything?
+
+## Installation
+
+- If you are on `mac` or `linux` run the below command.
+
+```bash
+curl https://raw.githubusercontent.com/bhumit070/deps-cleaner/main/install.sh | bash
+```
+
+## Usage
+
+| Command | Description                                                                                                                                         |
+| :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| clean   | This is main command that will clean all folders from given folder ( by default it will use current directory but you can pass other directory too) |
+
+- To get more info about any command just add `-h` after any command it will print info about it.
