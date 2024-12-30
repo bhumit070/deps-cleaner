@@ -153,10 +153,8 @@ func loadConfigFiles() {
 }
 
 func downloadConfigFile(url, filepath string) error {
-	// Step 1: Check if the file exists
 	existingData := make(map[string]interface{})
 	if _, err := os.Stat(filepath); err == nil {
-		// File exists, read its content
 		file, err := os.Open(filepath)
 		if err != nil {
 			return fmt.Errorf("failed to open existing file: %v", err)
@@ -169,7 +167,6 @@ func downloadConfigFile(url, filepath string) error {
 		}
 	}
 
-	// Step 2: Download the new JSON file
 	resp, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("failed to make GET request: %v", err)
@@ -186,10 +183,8 @@ func downloadConfigFile(url, filepath string) error {
 		return fmt.Errorf("failed to decode new JSON: %v", err)
 	}
 
-	// Step 3: Merge the existing data with the new data
 	mergeMaps(existingData, newData)
 
-	// Step 4: Write the merged data back to the file
 	outFile, err := os.Create(filepath)
 	if err != nil {
 		return fmt.Errorf("failed to create file: %v", err)
@@ -209,15 +204,12 @@ func downloadConfigFile(url, filepath string) error {
 func mergeMaps(dest, src map[string]interface{}) {
 	for key, srcValue := range src {
 		if srcMap, ok := srcValue.(map[string]interface{}); ok {
-			// If the source value is a map, merge recursively
 			if destValue, ok := dest[key].(map[string]interface{}); ok {
 				mergeMaps(destValue, srcMap)
 			} else {
-				// If the destination value is not a map, overwrite it
 				dest[key] = srcMap
 			}
 		} else {
-			// Overwrite non-map values
 			dest[key] = srcValue
 		}
 	}
