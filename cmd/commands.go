@@ -56,3 +56,11 @@ var cleanDependencies = &cobra.Command{
 		cleanDir(dirToClean)
 	},
 }
+
+var updateLocalConfig = &cobra.Command{
+	Use:   "config",
+	Short: "Update local configuration with your custom inputs",
+	Run: func(cmd *cobra.Command, args []string) {
+		updateValuesInLocalConfig()
+	},
+}

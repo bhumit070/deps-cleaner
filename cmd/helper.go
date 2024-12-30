@@ -133,7 +133,7 @@ func loadConfigFiles() {
 	_, isValid := validatePath(configFilePath, true, false)
 
 	if !isValid {
-		downloadConfigFile(dependenciesFileURL, configFilePath)
+		downloadConfigFile(remoteConfigURL, configFilePath)
 	}
 
 	file, err := os.Open(configFilePath)
@@ -148,6 +148,10 @@ func loadConfigFiles() {
 
 	if err := decoder.Decode(&config); err != nil {
 		printError(err.Error())
+	}
+
+	if config.RemoteConfigURL == "" {
+		config.RemoteConfigURL = remoteConfigURL
 	}
 
 }
@@ -185,6 +189,10 @@ func downloadConfigFile(url, filepath string) error {
 
 	mergeMaps(existingData, newData)
 
+	if _, exists := existingData["remoteConfigURL"]; !exists {
+		existingData["remoteConfigURL"] = remoteConfigURL
+	}
+
 	outFile, err := os.Create(filepath)
 	if err != nil {
 		return fmt.Errorf("failed to create file: %v", err)
@@ -192,12 +200,11 @@ func downloadConfigFile(url, filepath string) error {
 	defer outFile.Close()
 
 	encoder := json.NewEncoder(outFile)
-	encoder.SetIndent("", "  ") // Pretty print the JSON
+	encoder.SetIndent("", "  ")
 	if err := encoder.Encode(existingData); err != nil {
 		return fmt.Errorf("failed to write merged JSON to file: %v", err)
 	}
 
-	fmt.Println("JSON file updated successfully!")
 	return nil
 }
 
