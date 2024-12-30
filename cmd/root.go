@@ -33,9 +33,16 @@ func cleanDir(dir string) {
 	dirsToClean := findAllChildDirs(dir)
 
 	dirsToCleanCount := len(dirsToClean)
+
+	if dirsToCleanCount <= 0 {
+		printError("Nothing to clean...")
+	}
+
+	bar := GenerateProgressBar(dirsToCleanCount, "Cleaning Dirs")
 	for i := 0; i < dirsToCleanCount; i++ {
 		dir := dirsToClean[i]
 		cleanupDir(dir)
+		bar.Add(i + 1)
 	}
 }
 
@@ -53,11 +60,11 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolP("version", "v", false, "Prints the version")
-	rootCmd.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
 
 	loadConfigFiles()
 
 	rootCmd.AddCommand(updateLocalConfigurationWithRemote)
 	rootCmd.AddCommand(cleanDependencies)
+	cleanDependencies.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
 
 }

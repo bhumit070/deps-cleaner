@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/manifoldco/promptui"
+	"github.com/schollz/progressbar/v3"
 )
 
 func findAllChildDirs(rootDir string) []string {
@@ -220,4 +221,22 @@ func mergeMaps(dest, src map[string]interface{}) {
 			dest[key] = srcValue
 		}
 	}
+}
+
+func GenerateProgressBar(barPercentage int, message string) *progressbar.ProgressBar {
+
+	bar := progressbar.NewOptions(barPercentage,
+		progressbar.OptionEnableColorCodes(true),
+		progressbar.OptionSetWidth(30),
+		progressbar.OptionSetDescription(message),
+		progressbar.OptionSetPredictTime(false),
+		progressbar.OptionSetTheme(progressbar.Theme{
+			Saucer:        "[green]=[reset]",
+			SaucerHead:    "[green]>[reset]",
+			SaucerPadding: " ",
+			BarStart:      "[",
+			BarEnd:        "]",
+		}))
+
+	return bar
 }
