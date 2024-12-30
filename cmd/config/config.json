@@ -1,0 +1,22 @@
+{
+  "deps": {
+    "node_modules": true,
+    "vendor": true,
+    "__pycache__": true,
+    "venv": true,
+    "target": true,
+    "build": true,
+    "dist": true,
+    "bower_components": true,
+    "Pods": true,
+    "pub-cache": true,
+    "packages": true,
+    "__pypackages__": true,
+    "mvnrepository": true,
+    "target/classes": true,
+    "obj": true
+  },
+  "ignore": {
+    ".git": true
+  }
+}
