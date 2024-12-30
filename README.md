@@ -10,6 +10,11 @@ Deps Cleaner helps you remove unwanted dependency folders from your local system
 
 Let's be real—your disk is probably full of junk. You've cloned all those repos, started a bunch of projects, and then... forgot about them. It’s time to clean up. Maybe you need the space for something useful, like another repo you'll "definitely" come back to (but we both know you won’t).
 
+## Tasks
+
+- [ ] Add dry run flag to check which files will be deleted.
+- [ ] Add file or folder to config list, from cli.
+
 ## Inspiration
 
 I got the idea for this tool when I saw my disk slowly filling up with old projects and random repos I cloned for fun. You know, those projects you keep saying you’ll get back to? Yeah, we all have them.
