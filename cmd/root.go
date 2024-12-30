@@ -26,7 +26,7 @@ func init() {
 	rootCmd.AddCommand(cleanDependencies)
 	cleanDependencies.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
 
-	rootCmd.AddCommand(updateLocalConfig)
+	//rootCmd.AddCommand(updateLocalConfig)
 
 	updateLocalConfig.Flags().StringVar(&enumValue, "action", "", fmt.Sprintf("Specify the action (%v)", allowedValuesInLocalUpdate))
 	updateLocalConfig.MarkFlagRequired("action")
