@@ -64,7 +64,3 @@ var updateLocalConfig = &cobra.Command{
 		updateValuesInLocalConfig()
 	},
 }
-
-func init() {
-	cleanDependencies.Flags().BoolVarP(&showSpaceFreed, "show-space", "s", false, "Show amount of disk space freed")
-}

@@ -17,4 +17,3 @@ var enumValue string
 var allowedValuesInLocalUpdate = []string{"add", "remove", "update"}
 
 var totalFreedSpace int64
-var showSpaceFreed bool = false

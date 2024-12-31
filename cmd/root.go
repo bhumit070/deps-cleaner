@@ -49,10 +49,8 @@ func cleanupDir(dir string) {
 			continue
 		}
 
-		if showSpaceFreed {
-			if size, err := getDirSize(fileSystemPath); err == nil {
-				totalFreedSpace += size
-			}
+		if size, err := getDirSize(fileSystemPath); err == nil {
+			totalFreedSpace += size
 		}
 
 		os.RemoveAll(fileSystemPath)
@@ -76,9 +74,7 @@ func cleanDir(dir string) {
 		bar.Add(1)
 	}
 
-	if showSpaceFreed {
-		fmt.Printf("\nTotal space freed: %s\n", formatBytes(totalFreedSpace))
-	}
+	fmt.Printf("\nTotal space freed: %s\n", formatBytes(totalFreedSpace))
 }
 
 func updateLocalConfigurationWithRemoteConfig() {
