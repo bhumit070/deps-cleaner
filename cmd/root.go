@@ -49,14 +49,18 @@ func cleanupDir(dir string) {
 			continue
 		}
 
+		if size, err := getDirSize(fileSystemPath); err == nil {
+			totalFreedSpace += size
+		}
+
 		os.RemoveAll(fileSystemPath)
 	}
-
 }
 
 func cleanDir(dir string) {
-	dirsToClean := findAllChildDirs(dir)
+	totalFreedSpace = 0
 
+	dirsToClean := findAllChildDirs(dir)
 	dirsToCleanCount := len(dirsToClean)
 
 	if dirsToCleanCount <= 0 {
@@ -67,8 +71,10 @@ func cleanDir(dir string) {
 	for i := 0; i < dirsToCleanCount; i++ {
 		dir := dirsToClean[i]
 		cleanupDir(dir)
-		bar.Add(i + 1)
+		bar.Add(1)
 	}
+
+	fmt.Printf("\nTotal space freed: %s\n", formatBytes(totalFreedSpace))
 }
 
 func updateLocalConfigurationWithRemoteConfig() {
