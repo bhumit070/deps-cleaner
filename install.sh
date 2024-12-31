@@ -25,7 +25,7 @@ else
 fi
 
 platform="deps-cleaner-$platform"
-tagName=$(curl -s https://api.github.com/repos/bhumit070/deps-cleaner/releases/192679296 | awk -F'"tag_name":' '{print $2}' | awk -F'"' '{print $2}' | xargs)
+tagName=$(curl -s https://api.github.com/repos/bhumit070/deps-cleaner/releases/latest | awk -F'"tag_name":' '{print $2}' | awk -F'"' '{print $2}' | xargs)
 downloadableUrl="https://github.com/bhumit070/deps-cleaner/releases/download/$tagName/$platform"
 
 echo "downloading..."
