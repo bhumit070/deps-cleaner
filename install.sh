@@ -42,4 +42,7 @@ fi
 
 echo $command >>"$HOME/$shellFile"
 
+echo "Reloading shell profile..."
+source "$HOME/$shellFile" &>/dev/null
+
 echo "installation completed."
