@@ -16,3 +16,5 @@ var config Config
 
 var enumValue string
 var allowedValuesInLocalUpdate = []string{"add", "remove", "update"}
+
+var totalFreedSpace int64

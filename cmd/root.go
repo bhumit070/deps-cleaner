@@ -30,7 +30,7 @@ func init() {
 	cleanDependencies.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
 	cleanDependencies.Flags().BoolVarP(&isDryRun, "dry-run", "", false, "Prints all the file that will be deleted")
 
-	rootCmd.AddCommand(updateLocalConfig)
+	//rootCmd.AddCommand(updateLocalConfig)
 
 	updateLocalConfig.Flags().StringVar(&enumValue, "action", "", fmt.Sprintf("Specify the action (%v)", allowedValuesInLocalUpdate))
 	updateLocalConfig.MarkFlagRequired("action")
@@ -54,6 +54,11 @@ func cleanupDir(dir string, keepTheFile bool, filesToRemove *[]string) {
 		}
 
 		if !keepTheFile {
+
+			if size, err := getDirSize(fileSystemPath); err == nil {
+				totalFreedSpace += size
+			}
+
 			os.RemoveAll(fileSystemPath)
 		}
 
@@ -63,9 +68,9 @@ func cleanupDir(dir string, keepTheFile bool, filesToRemove *[]string) {
 }
 
 func cleanDir(dir string) map[string]string {
+	totalFreedSpace = 0
 	cleanedDirs := map[string]string{}
 	dirsToClean := findAllChildDirs(dir)
-
 	dirsToCleanCount := len(dirsToClean)
 
 	if dirsToCleanCount <= 0 {
@@ -114,10 +119,17 @@ func cleanDir(dir string) map[string]string {
 		promptForConfirmation("Above directories will be removed.")
 
 		for i := range filesToRemove {
+
+			if size, err := getDirSize(filesToRemove[i]); err == nil {
+				totalFreedSpace += size
+			}
+
 			os.RemoveAll(filesToRemove[i])
 		}
 
 	}
+
+	fmt.Printf("\nTotal space freed: %s\n", formatBytes(totalFreedSpace))
 
 	return cleanedDirs
 }
