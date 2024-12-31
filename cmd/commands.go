@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 		}
 
 	},
-	Version: "0.0.2",
+	Version: "0.0.3",
 }
 
 var updateLocalConfigurationWithRemote = &cobra.Command{
