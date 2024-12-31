@@ -16,15 +16,23 @@ import (
 func findAllChildDirs(rootDir string) []string {
 	var dirs []string
 
+	if isReadAndWriteAccessGranted := checkReadAndWriteAccess(rootDir); !isReadAndWriteAccessGranted {
+		printError("Read & Write access is not available at " + rootDir)
+	}
+
 	err := filepath.Walk(rootDir, func(fsPath string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
 
 		name := info.Name()
-
 		if config.Ignore[name] || config.Deps[name] || config.Ignore[fsPath] {
-			return filepath.SkipDir
+			return nil
+		}
+
+		if isReadAndWriteAccessGranted := checkReadAndWriteAccess(fsPath); !isReadAndWriteAccessGranted {
+			return nil
+		}
+
+		if err != nil {
+			return err
 		}
 
 		if info.IsDir() {
@@ -268,4 +276,33 @@ func formatBytes(bytes int64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.1f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
+}
+
+func checkReadAndWriteAccess(folderPath string) bool {
+
+	var isReadAccess, isWriteAccess bool = true, true
+
+	if _, err := os.Open(folderPath); err != nil {
+		if os.IsPermission(err) {
+			isReadAccess = false
+		} else {
+			isReadAccess = false
+		}
+	} else {
+		isReadAccess = true
+	}
+
+	tempTextFile := path.Join(folderPath, "temp.txt")
+	if _, err := os.Create(tempTextFile); err != nil {
+		if os.IsPermission(err) {
+			isWriteAccess = false
+		} else {
+			isWriteAccess = false
+		}
+		os.Remove(tempTextFile)
+	} else {
+		isWriteAccess = true
+	}
+
+	return isReadAccess && isWriteAccess
 }
