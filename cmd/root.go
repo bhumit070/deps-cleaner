@@ -91,6 +91,10 @@ func cleanDir(dir string) map[string]string {
 	bar.Close()
 	fmt.Println()
 
+	if len(filesToRemove) <= 0 {
+		printError("Nothing to clean")
+	}
+
 	if isDryRun {
 
 		headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
