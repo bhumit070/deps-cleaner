@@ -15,6 +15,6 @@ type Config struct {
 var config Config
 
 var enumValue string
-var allowedValuesInLocalUpdate = []string{"add", "remove", "update"}
+var allowedValuesInLocalUpdate = []string{"add", "remove"}
 
 var totalFreedSpace int64
