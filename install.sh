@@ -42,7 +42,12 @@ fi
 
 echo $command >>"$HOME/$shellFile"
 
-echo "Reloading shell profile..."
-source "$HOME/$shellFile" &>/dev/null
+echo "Changes applied. Reload shell now? [y/N]"
+read -r answer
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+	exec "$SHELL" -l
+else
+	echo "You can reload the shell later by running: exec \"\$SHELL\" -l"
+fi
 
 echo "installation completed."
