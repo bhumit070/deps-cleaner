@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"os"
 	"path"
@@ -22,9 +23,13 @@ func findAllChildDirs(rootDir string) []string {
 
 	err := filepath.Walk(rootDir, func(fsPath string, info os.FileInfo, err error) error {
 
+		if info == nil {
+			return nil
+		}
+
 		name := info.Name()
 		if config.Ignore[name] || config.Deps[name] || config.Ignore[fsPath] {
-			return nil
+			return fs.SkipDir
 		}
 
 		if isReadAndWriteAccessGranted := checkReadAndWriteAccess(fsPath); !isReadAndWriteAccessGranted {
@@ -299,8 +304,8 @@ func checkReadAndWriteAccess(folderPath string) bool {
 		} else {
 			isWriteAccess = false
 		}
-		os.Remove(tempTextFile)
 	} else {
+		os.Remove(tempTextFile)
 		isWriteAccess = true
 	}
 
