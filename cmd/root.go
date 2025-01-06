@@ -1,9 +1,7 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path"
@@ -30,7 +28,7 @@ func init() {
 	cleanDependencies.Flags().BoolVarP(&skipConfirmation, "yes", "y", false, "Do not ask for confirmation before removing the dependencies")
 	cleanDependencies.Flags().BoolVarP(&isDryRun, "dry-run", "", false, "Prints all the file that will be deleted")
 
-	//rootCmd.AddCommand(updateLocalConfig)
+	rootCmd.AddCommand(updateLocalConfig)
 
 	updateLocalConfig.Flags().StringVar(&enumValue, "action", "", fmt.Sprintf("Specify the action (%v)", allowedValuesInLocalUpdate))
 	updateLocalConfig.MarkFlagRequired("action")
@@ -139,11 +137,65 @@ func updateLocalConfigurationWithRemoteConfig() {
 	downloadConfigFile(config.RemoteConfigURL, configFilePath)
 }
 
-func updateValuesInLocalConfig() {
+func updateValuesInLocalConfig(args []string) {
+
+	var configKey, key string
+
+	if len(args) >= 1 {
+		configKey = args[0]
+	}
+
+	if len(args) >= 2 {
+		key = args[1]
+	}
+
+	isConfigValueChanged := false
+
+	if configKey == "" || key == "" {
+		printError("values are missing to add value to config")
+	}
 
 	if enumValue == "add" {
-	} else if enumValue == "update" {
+
+		if configKey == "deps" {
+			config.Deps[key] = true
+			isConfigValueChanged = true
+		}
+
+		if configKey == "ignore" {
+			config.Ignore[key] = true
+			isConfigValueChanged = true
+		}
+
 	} else if enumValue == "remove" {
+
+		if configKey == "deps" {
+			delete(config.Deps, key)
+			isConfigValueChanged = true
+		}
+
+		if configKey == "ignore" {
+			delete(config.Ignore, key)
+			isConfigValueChanged = true
+		}
+	}
+
+	if !isConfigValueChanged {
+		return
+	}
+
+	configFilePath := generateConfigPaths()
+
+	outFile, err := os.Create(configFilePath)
+	if err != nil {
+		printError("Failed to load config file")
+	}
+	defer outFile.Close()
+
+	encoder := json.NewEncoder(outFile)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(config); err != nil {
+		printError("Failed to save the file.")
 	}
 
 }
