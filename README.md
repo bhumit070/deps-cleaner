@@ -24,6 +24,7 @@ I first thought of making a tool like `np-kill` just for node_modules, but then 
 ## Installation
 
 - If you are on `mac` or `linux` run the below command.
+- On windows download `deps-cleaner.exe` from [latest release](https://github.com/bhumit070/deps-cleaner/releases/latest) and you have to run the cli from that path.
 
 ```bash
 curl https://raw.githubusercontent.com/bhumit070/deps-cleaner/main/install.sh | bash
