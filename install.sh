@@ -28,17 +28,17 @@ platform="deps-cleaner-$platform"
 tagName=$(curl -s https://api.github.com/repos/bhumit070/deps-cleaner/releases/latest | awk -F'"tag_name":' '{print $2}' | awk -F'"' '{print $2}' | xargs)
 downloadableUrl="https://github.com/bhumit070/deps-cleaner/releases/download/$tagName/$platform"
 
-echo "downloading..."
-installDir="$HOME/.deps-cleaner"
-destinationPath="$installDir/deps-cleaner"
-mkdir -p "$installDir"
-curl -# -L "$downloadableUrl" -o "$destinationPath" && chmod +x "$destinationPath"
-
 command="export PATH=\$PATH:\$HOME/.deps-cleaner"
 if grep -q "$command" "$HOME/$shellFile"; then
 	echo "already installed."
 	exit 0
 fi
+
+echo "downloading..."
+installDir="$HOME/.deps-cleaner"
+destinationPath="$installDir/deps-cleaner"
+mkdir -p "$installDir"
+curl -# -L "$downloadableUrl" -o "$destinationPath" && chmod +x "$destinationPath"
 
 echo $command >>"$HOME/$shellFile"
 
