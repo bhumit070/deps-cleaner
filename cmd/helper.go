@@ -284,30 +284,22 @@ func formatBytes(bytes int64) string {
 }
 
 func checkReadAndWriteAccess(folderPath string) bool {
-
-	var isReadAccess, isWriteAccess bool = true, true
-
-	if _, err := os.Open(folderPath); err != nil {
-		if os.IsPermission(err) {
-			isReadAccess = false
-		} else {
-			isReadAccess = false
-		}
-	} else {
-		isReadAccess = true
+	// Check Read Access
+	f, err := os.Open(folderPath)
+	if err != nil {
+		return false
 	}
+	f.Close() // Close immediately
 
+	// Check Write Access
 	tempTextFile := path.Join(folderPath, "temp.txt")
-	if _, err := os.Create(tempTextFile); err != nil {
-		if os.IsPermission(err) {
-			isWriteAccess = false
-		} else {
-			isWriteAccess = false
-		}
-	} else {
-		os.Remove(tempTextFile)
-		isWriteAccess = true
+	f, err = os.Create(tempTextFile)
+	if err != nil {
+		return false
 	}
+	f.Close() // Close immediately
 
-	return isReadAccess && isWriteAccess
+	// Cleanup
+	err = os.Remove(tempTextFile)
+	return err == nil
 }
